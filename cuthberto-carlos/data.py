@@ -8,7 +8,7 @@ DATA_URL = (
     "https://raw.githubusercontent.com/martj42/international_results/master/results.csv"
 )
 # I'm not sure exactly how often this data is updated, but it seems pretty frequently
-# Also note it can contain matches in the future (with NA/NaN for scores)
+# Also note it can contain matches in the future (with NA/NaN for home_score and away_score)
 
 
 class ResultData(NamedTuple):
