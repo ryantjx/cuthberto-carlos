@@ -12,8 +12,19 @@ DATA_URL = (
 
 
 class ResultData(NamedTuple):
-    """NamedTuple containing JAX arrays for a football match or set of matches."""
+    """NamedTuple containing JAX arrays for a football match or set of matches.
 
+    Attributes:
+        match_index: Unique integer index for each match, starting from 0.
+        home_team_id: Integer ID for the home team.
+        away_team_id: Integer ID for the away team.
+        home_score: Integer number of goals scored by the home team in the match.
+        away_score: Integer number of goals scored by the away team in the match.
+        timestamp_days: Integer number of days since the origin date for the match.
+        neutral: Boolean indicating whether the match was played on neutral ground.
+    """
+
+    match_index: Array
     home_team_id: Array
     away_team_id: Array
     home_score: Array
@@ -84,6 +95,7 @@ def download_data(
     )
 
     jax_data = ResultData(
+        match_index=jnp.array(data_all.index.values),
         home_team_id=jnp.array(data_all["home_team_id"].values),
         away_team_id=jnp.array(data_all["away_team_id"].values),
         home_score=jnp.array(data_all["home_score"].values),
@@ -97,5 +109,7 @@ def download_data(
 
 if __name__ == "__main__":
     data_all, jax_data, teams_id_to_name_dict, teams_name_to_id_dict = download_data()
-    print(data_all.tail())
+    print("Pandas dataframe: \n")
+    print(data_all)
+    print("\n\n JAX arrays:\n")
     print(jax_data)
