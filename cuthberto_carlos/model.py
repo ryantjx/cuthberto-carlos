@@ -20,7 +20,7 @@ def get_init_log_density(
     """Get log p(x_0).
 
     x_0 is of shape (2,) or (num_teams, 2), where the 2 state dimensions correspond to
-    strength of defence and attack.
+    strength of attack and defence.
 
     Args:
         model_inputs: The match data, used to determine the number of teams.
@@ -60,7 +60,7 @@ def get_dynamics_log_density(
             Only used to determine the number of factors to be processed.
         model_inputs: The match data, used to determine the time between matches.
         tau: Brownian standard deviation per day.
-            Shape (,), (1,) or (2,) for defence and attack.
+            Shape (,), (1,) or (2,) for attack and defence.
 
     Returns:
         A tuple containing log density function, linearization point for x_{t-1}, and
@@ -83,7 +83,7 @@ def get_dynamics_log_density(
     # process into guaranteed shape (2 * num_joined_factors,)
     def process_timestamp(t):
         t = jnp.broadcast_to(t, (num_joined_factors,))
-        return jnp.repeat(t, 2)  # Repeat for defence and attack
+        return jnp.repeat(t, 2)  # Repeat for attack and defence.
 
     timestamp = process_timestamp(model_inputs.timestamp)
     timestamp_previous = process_timestamp(model_inputs.timestamp_previous)
