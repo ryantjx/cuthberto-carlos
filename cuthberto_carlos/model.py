@@ -102,7 +102,20 @@ def get_observation_log_potential(
     beta: float,
     max_goals: int = 8,
 ) -> tuple[taylor.LogPotential, Array]:
-    """Get log p(y_t | x_t) as a function of x_t for Bivariate Poisson."""
+    """Get log p(y_t | x_t) as a function of x_t for Bivariate Poisson.
+
+    Args:
+        state: The current state of the Kalman filter.
+            Only used to determine the number of factors to be processed.
+        model_inputs: The match data, used to extract the match score.
+        alpha: Scalar baseline scoring parameter.
+        beta: Scalar covariance/shared-scoring parameter.
+        max_goals: Static upper bound for the finite sum in the bivariate Poisson
+            log likelihood. Must be >= min(home_score, away_score).
+
+    Returns:
+        A tuple containing log potential function and linearization point for x_t.
+    """
 
     def log_potential(x: Array) -> Array:
         y = jnp.array([model_inputs.home_score, model_inputs.away_score])

@@ -1,24 +1,27 @@
-"""Bivariate Poisson log likelihood."""
+"""Bivariate Poisson log likelihood utils."""
 
 import functools
 import jax
-import jax.numpy as jnp
+from jax import numpy as jnp, Array
+from jax.typing import ArrayLike
 from jax.scipy.special import gammaln, logsumexp
 
 
-def _poisson_logpmf(y, log_rate):
+def _poisson_logpmf(y: ArrayLike, log_rate: ArrayLike) -> Array:
+    y = jnp.asarray(y)
+    log_rate = jnp.asarray(log_rate)
     rate = jnp.exp(log_rate)
     return y * log_rate - rate - gammaln(y + 1)
 
 
 @functools.partial(jax.jit, static_argnames=("max_goals",))
 def bivariate_poisson_loglik_grid(
-    x_i: jnp.ndarray,
-    x_j: jnp.ndarray,
+    x_i: ArrayLike,
+    x_j: ArrayLike,
     alpha: float,
     beta: float,
     max_goals: int,
-) -> jnp.ndarray:
+) -> Array:
     """Returns grid G where G[a, b] = log p(Y_i=a, Y_j=b).
 
     Args:
@@ -31,6 +34,9 @@ def bivariate_poisson_loglik_grid(
     Returns:
         loglik_grid: shape (max_goals + 1, max_goals + 1)
     """
+    x_i = jnp.asarray(x_i)
+    x_j = jnp.asarray(x_j)
+
     log_lambda1 = alpha + x_i[0] - x_j[1]
     log_lambda2 = alpha + x_j[0] - x_i[1]
     log_lambda3 = beta
@@ -59,19 +65,21 @@ def bivariate_poisson_loglik_grid(
     return logsumexp(log_terms, axis=0)
 
 
-def _log_binom(n, k):
+def _log_binom(n: ArrayLike, k: ArrayLike) -> Array:
+    n = jnp.asarray(n)
+    k = jnp.asarray(k)
     return gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
 
 
 @functools.partial(jax.jit, static_argnames=("max_goals",))
 def bivariate_poisson_loglik(
-    y: jnp.ndarray,
-    x_i: jnp.ndarray,
-    x_j: jnp.ndarray,
+    y: ArrayLike,
+    x_i: ArrayLike,
+    x_j: ArrayLike,
     alpha: float,
     beta: float,
-    max_goals: int = 20,
-) -> jnp.ndarray:
+    max_goals: int,
+) -> Array:
     """Log likelihood for the bivariate Poisson football-score model.
 
     Args:
@@ -88,6 +96,8 @@ def bivariate_poisson_loglik(
     Returns:
         Scalar log p(y | x_i, x_j, alpha, beta).
     """
+    x_i = jnp.asarray(x_i)
+    x_j = jnp.asarray(x_j)
     y = jnp.asarray(y)
     y_i = y[0]
     y_j = y[1]
