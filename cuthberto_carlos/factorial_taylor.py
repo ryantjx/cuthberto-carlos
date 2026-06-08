@@ -2,8 +2,9 @@
 
 This is really a minor shape handling point allowing different `linearization_point`s
 in `init_prepare` and `filter_prepare`. This should shortly be fixed in `cuthbert`.
-
-Note: we've removed `associative=True` support.
+The only change from https://github.com/state-space-models/cuthbert/blob/main/cuthbert/gaussian/taylor/filter.py
+is to add the optional `get_init_log_density_filter_prepare` arg, (as well as removing
+`associative=True` support for brevity here).
 """
 
 from functools import partial
@@ -61,11 +62,13 @@ def build_filter(
             get_init_log_density=get_init_log_density,
             rtol=rtol,
             ignore_nan_dims=ignore_nan_dims,
-        ),  # type: ignore - come back to this - seems ty is complaining about keyword-only-ness, I don't think pyright does
+        ),  # type: ignore
+        # TODO: remove ignore - seems ty is complaining about keyword-only-ness, I don't think pyright does
         filter_prepare=partial(
             non_associative_filter.filter_prepare,
             get_init_log_density=get_init_log_density_filter_prepare,
-        ),  # type: ignore - same as above
+        ),  # type: ignore -
+        # TODO: same as above
         filter_combine=partial(
             non_associative_filter.filter_combine,
             get_dynamics_log_density=get_dynamics_log_density,
