@@ -15,7 +15,7 @@ def _poisson_logpmf(y: ArrayLike, log_rate: ArrayLike) -> Array:
 
 
 @functools.partial(jax.jit, static_argnames=("max_goals",))
-def bivariate_poisson_loglik_grid(
+def loglik_grid(
     x_i: ArrayLike,
     x_j: ArrayLike,
     alpha: float,
@@ -72,7 +72,7 @@ def _log_binom(n: ArrayLike, k: ArrayLike) -> Array:
 
 
 @functools.partial(jax.jit, static_argnames=("max_goals",))
-def bivariate_poisson_loglik(
+def loglik(
     y: ArrayLike,
     x_i: ArrayLike,
     x_j: ArrayLike,

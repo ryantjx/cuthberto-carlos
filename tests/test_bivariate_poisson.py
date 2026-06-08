@@ -1,9 +1,6 @@
 from jax import numpy as jnp
 
-from cuthberto_carlos.bivariate_poisson import (
-    bivariate_poisson_loglik,
-    bivariate_poisson_loglik_grid,
-)
+from cuthberto_carlos import bivariate_poisson
 
 
 def test_bivariate_poisson_loglik_grid_matches_scalar_loglik() -> None:
@@ -13,11 +10,11 @@ def test_bivariate_poisson_loglik_grid_matches_scalar_loglik() -> None:
     alpha = -0.2
     beta = -1.1
 
-    grid = bivariate_poisson_loglik_grid(x_i, x_j, alpha, beta, max_goals)
+    grid = bivariate_poisson.loglik_grid(x_i, x_j, alpha, beta, max_goals)
 
     for y_i in range(max_goals + 1):
         for y_j in range(max_goals + 1):
-            scalar = bivariate_poisson_loglik(
+            scalar = bivariate_poisson.loglik(
                 jnp.array([y_i, y_j]),
                 x_i,
                 x_j,
@@ -43,12 +40,12 @@ def test_bivariate_poisson_loglik_matches_simple_expected_values() -> None:
         ]
     )
 
-    grid = bivariate_poisson_loglik_grid(x_i, x_j, alpha, beta, max_goals)
+    grid = bivariate_poisson.loglik_grid(x_i, x_j, alpha, beta, max_goals)
     assert jnp.allclose(grid, expected, rtol=1e-6, atol=1e-6)
 
     for y_i in range(max_goals + 1):
         for y_j in range(max_goals + 1):
-            scalar = bivariate_poisson_loglik(
+            scalar = bivariate_poisson.loglik(
                 jnp.array([y_i, y_j]),
                 x_i,
                 x_j,

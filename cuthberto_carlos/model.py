@@ -8,7 +8,7 @@ from cuthbertlib.types import LogConditionalDensity, LogDensity
 from cuthbert.gaussian import taylor
 
 from cuthberto_carlos.types import ResultData, DynamicsOnlyData
-from cuthberto_carlos.bivariate_poisson import bivariate_poisson_loglik
+from cuthberto_carlos import bivariate_poisson
 
 
 def get_init_log_density(
@@ -121,6 +121,6 @@ def get_observation_log_potential(
         y = jnp.array([model_inputs.home_score, model_inputs.away_score])
         x_i = x[:2]
         x_j = x[2:]
-        return bivariate_poisson_loglik(y, x_i, x_j, alpha, beta, max_goals)
+        return bivariate_poisson.loglik(y, x_i, x_j, alpha, beta, max_goals)
 
     return log_potential, state.mean
