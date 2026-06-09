@@ -14,8 +14,8 @@ num_teams = 5
 init_mean = jnp.array([1.2, 3.2])
 init_sd = jnp.array([0.3, 1.1])
 tau = jnp.array([0.1, 0.2])
-alpha = 0.5
-beta = 0.1
+alpha = 1.0
+beta = -4.0
 
 
 filter = taylor.build_filter(
@@ -70,14 +70,15 @@ def test_init_filter():
 def test_dynamics():
     state = filter.init_prepare(None)
     model_inputs = ResultData(
-        match_index=jnp.array([0]),
-        home_team_id=jnp.array([0]),
-        away_team_id=jnp.array([1]),
-        home_score=jnp.array([2]),
-        away_score=jnp.array([1]),
-        neutral=jnp.array([False]),
+        match_index=jnp.array(0),
+        home_team_id=jnp.array(0),
+        away_team_id=jnp.array(1),
+        home_score=jnp.array(2),
+        away_score=jnp.array(1),
+        neutral=jnp.array(False),
         timestamp=jnp.array([10, 10]),
-        timestamp_previous=jnp.array([5, 1]),
+        home_timestamp_previous=jnp.array(5),
+        away_timestamp_previous=jnp.array(1),
     )
     log_density, lin_point_prev, lin_point_curr = get_dynamics_log_density(
         state, model_inputs, tau
@@ -91,8 +92,14 @@ def test_dynamics():
 
     assert jnp.allclose(jnp.eye(4), mat)
     assert jnp.array_equal(jnp.zeros(4), shift)
-    assert model_inputs.timestamp_previous is not None
-    time_diffs = model_inputs.timestamp - model_inputs.timestamp_previous
+    assert model_inputs.home_timestamp_previous is not None
+    assert model_inputs.away_timestamp_previous is not None
+    time_diffs = model_inputs.timestamp - jnp.array(
+        [
+            model_inputs.home_timestamp_previous,
+            model_inputs.away_timestamp_previous,
+        ]
+    )
     time_diffs_repeated = jnp.repeat(time_diffs, 2)  # Repeat for attack and defence
     tau_repeated = jnp.tile(tau, 2)  # Repeat for attack and defence
     desired_cov = jnp.diag((tau_repeated**2) * time_diffs_repeated)

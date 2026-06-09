@@ -15,8 +15,8 @@ class ResultData(NamedTuple):
         away_score: Integer number of goals scored by the away team in the match.
         neutral: Boolean indicating whether the match was played on neutral ground.
         timestamp: Integer number of days since the origin date for the match.
-        timestamp_previous: Optional timestamp for the previous match of the team(s).
-            Used to determine the time between matches for the dynamics log density.
+        home_timestamp_previous: Optional timestamp for the previous home team match.
+        away_timestamp_previous: Optional timestamp for the previous away team match.
     """
 
     match_index: Array
@@ -26,7 +26,8 @@ class ResultData(NamedTuple):
     away_score: Array
     neutral: Array
     timestamp: Array
-    timestamp_previous: Array | None = None
+    home_timestamp_previous: Array | None = None
+    away_timestamp_previous: Array | None = None
 
 
 class DynamicsOnlyData(NamedTuple):

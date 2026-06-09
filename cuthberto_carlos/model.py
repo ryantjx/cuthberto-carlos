@@ -11,6 +11,22 @@ from cuthberto_carlos.types import ResultData, DynamicsOnlyData
 from cuthberto_carlos import bivariate_poisson
 
 
+def get_factorial_inds(model_inputs: ResultData | DynamicsOnlyData) -> Array:
+    """Get indices of the factors corresponding to the match score.
+
+    Args:
+        model_inputs: The match data, used to extract the team indices.
+
+    Returns:
+        An array of either shape (2,) for two teams involved in a match
+            or shape (,) for a single team in the case of DynamicsOnlyData.
+    """
+    if isinstance(model_inputs, ResultData):
+        return jnp.array([model_inputs.home_team_id, model_inputs.away_team_id])
+    elif isinstance(model_inputs, DynamicsOnlyData):
+        return jnp.array(model_inputs.team_id)
+
+
 def get_init_log_density(
     model_inputs: Any,
     init_mean: ArrayLike,
@@ -71,21 +87,35 @@ def get_dynamics_log_density(
     # x_prev.shape = x.shape = (2 * num_joined_factors,)
     # Repeat tau num_joined_factors times
     tau_repeated = jnp.tile(tau, num_joined_factors)
-    assert model_inputs.timestamp_previous is not None, (
-        "model_inputs.timestamp_previous is required for dynamics log density"
-    )
 
-    # timestamp.shape = timestamp_previous.shape = (,) or (1,) or (num_joined_factors,)
-    # process into guaranteed shape (2 * num_joined_factors,)
     def process_timestamp(t):
         t = jnp.broadcast_to(t, (num_joined_factors,))
         return jnp.repeat(t, 2)  # Repeat for attack and defence.
 
-    timestamp = process_timestamp(model_inputs.timestamp)
-    timestamp_previous = process_timestamp(model_inputs.timestamp_previous)
+    if isinstance(model_inputs, ResultData):
+        assert (
+            model_inputs.home_timestamp_previous is not None
+            and model_inputs.away_timestamp_previous is not None
+        ), (
+            "model_inputs.home_timestamp_previous and "
+            "model_inputs.away_timestamp_previous are required for dynamics log density"
+        )
+        timestamp_previous = jnp.array(
+            [
+                model_inputs.home_timestamp_previous,
+                model_inputs.away_timestamp_previous,
+            ]
+        )
+    else:
+        timestamp_previous = model_inputs.timestamp_previous
 
-    std_devs = tau_repeated * jnp.sqrt(timestamp - timestamp_previous) + 1e-8
-    # Add small nugget to avoid numerical issues when timestamp = timestamp_previous
+    timestamp = process_timestamp(model_inputs.timestamp)
+    timestamp_previous = process_timestamp(timestamp_previous)
+
+    elapsed_days = jnp.maximum(timestamp - timestamp_previous, 0)
+    std_devs = tau_repeated * jnp.sqrt(elapsed_days)
+    std_floor = 1e-2
+    std_devs = jnp.where(std_devs > std_floor, std_devs, std_floor)
 
     def dynamics_log_density(x_prev, x):
         return norm.logpdf(x, x_prev, std_devs).sum()
@@ -121,6 +151,8 @@ def get_observation_log_potential(
         y = jnp.array([model_inputs.home_score, model_inputs.away_score])
         x_i = x[:2]
         x_j = x[2:]
-        return bivariate_poisson.loglik(y, x_i, x_j, alpha, beta, max_goals)
+        loglik = bivariate_poisson.loglik(y, x_i, x_j, alpha, beta, max_goals)
+        curvature_nugget = 1e-2
+        return loglik - curvature_nugget * jnp.sum(jnp.square(x - state.mean))
 
     return log_potential, state.mean

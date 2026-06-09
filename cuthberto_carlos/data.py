@@ -1,6 +1,7 @@
 """Download historical international football data."""
 
 import pandas as pd
+import numpy as np
 from jax import numpy as jnp
 
 from cuthberto_carlos.types import ResultData
@@ -81,6 +82,32 @@ def download_data(
         lambda s: teams_name_to_id_dict[s]
     )
 
+    # Extract previous timestamps for home and away teams
+    num_matches = len(data_all)
+    match_positions = np.arange(num_matches)
+    timestamps = data_all["timestamp_days"].to_numpy()
+    team_ids = np.concatenate(
+        [
+            data_all["home_team_id"].to_numpy(),
+            data_all["away_team_id"].to_numpy(),
+        ]
+    )
+    match_positions_by_team = np.concatenate([match_positions, match_positions])
+    timestamps_by_team = np.concatenate([timestamps, timestamps])
+    is_home_team = np.concatenate(
+        [np.ones(num_matches, dtype=bool), np.zeros(num_matches, dtype=bool)]
+    )
+    order = np.lexsort((match_positions_by_team, timestamps_by_team, team_ids))
+    previous_timestamps = np.zeros(2 * num_matches, dtype=timestamps.dtype)
+    same_team_as_previous = team_ids[order][1:] == team_ids[order][:-1]
+    previous_timestamps[order[1:]] = np.where(
+        same_team_as_previous,
+        timestamps_by_team[order[:-1]],
+        0,
+    )
+    data_all["home_timestamp_previous"] = previous_timestamps[is_home_team]
+    data_all["away_timestamp_previous"] = previous_timestamps[~is_home_team]
+
     jax_data = ResultData(
         match_index=jnp.array(data_all.index.values),
         home_team_id=jnp.array(data_all["home_team_id"].values),
@@ -89,6 +116,8 @@ def download_data(
         away_score=jnp.array(data_all["away_score"].values),
         timestamp=jnp.array(data_all["timestamp_days"].values),
         neutral=jnp.array(data_all["neutral"].values),
+        home_timestamp_previous=jnp.array(data_all["home_timestamp_previous"].values),
+        away_timestamp_previous=jnp.array(data_all["away_timestamp_previous"].values),
     )
 
     return data_all, jax_data, teams_id_to_name_dict, teams_name_to_id_dict
