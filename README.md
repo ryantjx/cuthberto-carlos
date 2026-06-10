@@ -54,9 +54,6 @@ Overall, the static parameters of the models are $\mu_0 \in \mathbb{R}^2$, $\Sig
 
 Filtering in this model can be done using either the `cuthbert` SMC or `gaussian` filters combined with the `factorial` functionality.
 
-A nice option is `cuthbert.gaussian.taylor` as in the [(non-factorial) example](https://state-space-models.github.io/cuthbert/quickstart/). Since it only requires log densities and we don't expect the true filtering distributions to be too non-Gaussian, it should work well and be faster than SMC.
-
-
 ### Predictions and output
 
 The end goal will be to generate small prediction graphics prior to each match in the World Cup. These can show 3 things:
