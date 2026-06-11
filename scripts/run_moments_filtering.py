@@ -34,9 +34,9 @@ init_mean = jnp.array([0.0, 0.0])
 # init_cov = jnp.array([[1.0, 0.2], [0.2, 1.0]])
 # kappa = 1e-4
 # friendly_scale = 1.0
-alpha = jnp.log(
-    average_goals_per_team_in_a_draw
-)  # exp(alpha) is expected goals for an evenly matched game
+# alpha = jnp.log(
+#     average_goals_per_team_in_a_draw
+# )  # exp(alpha) is expected goals for an evenly matched game
 # beta = -2.0
 
 
@@ -45,7 +45,6 @@ with open(params_file, "r") as f:
     params = json.load(f)["params"]
 
 params = {k: jnp.asarray(v) for k, v in params.items()}
-
 
 num_teams = len(teams_id_to_name_dict)
 

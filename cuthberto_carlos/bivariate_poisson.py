@@ -1,6 +1,6 @@
 """Bivariate Poisson log likelihood utils."""
 
-import functools
+from functools import partial
 import jax
 from jax import numpy as jnp, Array
 from jax.typing import ArrayLike
@@ -14,33 +14,13 @@ def _poisson_logpmf(y: ArrayLike, log_rate: ArrayLike) -> Array:
     return y * log_rate - rate - gammaln(y + 1)
 
 
-@functools.partial(jax.jit, static_argnames=("max_goals",))
-def loglik_grid(
-    x_i: ArrayLike,
-    x_j: ArrayLike,
-    alpha: float,
-    beta: float,
+@partial(jax.jit, static_argnames=("max_goals",))
+def _loglik_grid_loglambdas(
+    log_lambda1: ArrayLike,
+    log_lambda2: ArrayLike,
+    log_lambda3: float,
     max_goals: int,
 ) -> Array:
-    """Returns grid G where G[a, b] = log p(Y_i=a, Y_j=b).
-
-    Args:
-        x_i: shape (2,), [attack_i, defence_i]
-        x_j: shape (2,), [attack_j, defence_j]
-        alpha: scalar baseline scoring parameter
-        beta: scalar shared-scoring/correlation parameter
-        max_goals: largest score included in the grid
-
-    Returns:
-        loglik_grid: shape (max_goals + 1, max_goals + 1)
-    """
-    x_i = jnp.asarray(x_i)
-    x_j = jnp.asarray(x_j)
-
-    log_lambda1 = alpha + x_i[0] - x_j[1]
-    log_lambda2 = alpha + x_j[0] - x_i[1]
-    log_lambda3 = beta
-
     scores = jnp.arange(max_goals + 1)
 
     y_i = scores[:, None]  # shape (G, 1)
@@ -65,13 +45,44 @@ def loglik_grid(
     return logsumexp(log_terms, axis=0)
 
 
+@partial(jax.jit, static_argnames=("max_goals",))
+def loglik_grid(
+    x_i: ArrayLike,
+    x_j: ArrayLike,
+    alpha: float,
+    beta: float,
+    max_goals: int,
+    scale: float = 1.0,
+) -> Array:
+    """Returns grid G where G[a, b] = log p(Y_i=a, Y_j=b).
+
+    Args:
+        x_i: shape (2,), [attack_i, defence_i]
+        x_j: shape (2,), [attack_j, defence_j]
+        alpha: scalar baseline scoring parameter
+        beta: scalar shared-scoring/correlation parameter
+        max_goals: largest score included in the grid
+        scale: scalar parameter that controls the influence of the team strength
+
+    Returns:
+        loglik_grid: shape (max_goals + 1, max_goals + 1)
+    """
+    x_i = jnp.asarray(x_i)
+    x_j = jnp.asarray(x_j)
+
+    log_lambda1 = alpha + (x_i[0] - x_j[1]) / scale
+    log_lambda2 = alpha + (x_j[0] - x_i[1]) / scale
+    log_lambda3 = beta
+    return _loglik_grid_loglambdas(log_lambda1, log_lambda2, log_lambda3, max_goals)
+
+
 def _log_binom(n: ArrayLike, k: ArrayLike) -> Array:
     n = jnp.asarray(n)
     k = jnp.asarray(k)
     return gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
 
 
-@functools.partial(jax.jit, static_argnames=("max_goals",))
+@partial(jax.jit, static_argnames=("max_goals",))
 def loglik(
     y: ArrayLike,
     x_i: ArrayLike,
@@ -79,6 +90,7 @@ def loglik(
     alpha: float,
     beta: float,
     max_goals: int,
+    scale: float = 1.0,
 ) -> Array:
     """Log likelihood for the bivariate Poisson football-score model.
 
@@ -92,6 +104,7 @@ def loglik(
         alpha: scalar baseline scoring parameter.
         beta: scalar covariance/shared-scoring parameter.
         max_goals: static upper bound for the finite sum. Must be >= min(y).
+        scale: scalar parameter that controls the influence of the team strength
 
     Returns:
         Scalar log p(y | x_i, x_j, alpha, beta).
@@ -103,8 +116,8 @@ def loglik(
     y_j = y[1]
 
     # Log rates
-    log_lambda1 = alpha + x_i[0] - x_j[1]
-    log_lambda2 = alpha + x_j[0] - x_i[1]
+    log_lambda1 = alpha + (x_i[0] - x_j[1]) / scale
+    log_lambda2 = alpha + (x_j[0] - x_i[1]) / scale
     log_lambda3 = beta
 
     lambda1 = jnp.exp(log_lambda1)

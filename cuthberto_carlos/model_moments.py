@@ -5,11 +5,13 @@ from typing import Any
 from jax import Array
 from jax import numpy as jnp
 from jax.typing import ArrayLike
+import ghq
 
 from cuthbert.gaussian.types import LinearizedKalmanFilterState
 from cuthbertlib.linearize.moments import MeanAndCholCovFunc
 
 from cuthberto_carlos.data_types import DynamicsOnlyData, ResultData
+from cuthberto_carlos.bivariate_poisson import _loglik_grid_loglambdas
 
 
 def get_factorial_inds(model_inputs: ResultData | DynamicsOnlyData) -> Array:
@@ -213,3 +215,76 @@ def get_observation_params_noop(
         return jnp.zeros(1, dtype=dtype), jnp.ones((1, 1), dtype=dtype)
 
     return observation_mean_and_chol_cov, state.mean, jnp.array([jnp.nan])
+
+
+def predict_match(
+    skills_mean: ArrayLike,
+    skills_cov: ArrayLike,
+    alpha: ArrayLike,
+    beta: ArrayLike,
+    scale: ArrayLike,
+    max_goals: int,
+    gauss_hermite_degree: int = 32,
+) -> tuple[Array, Array]:
+    """Predict the distribution of match scores given the distribution of team skills.
+
+    Args:
+        skills_mean: Array of shape (2, 2) containing the mean of the attack and defence
+            skills for both teams, in the order [[attack_i, defence_i], [attack_j, defence_j]].
+        skills_cov: Array of shape (2, 2, 2) containing the covariance of the attack and
+            defence skills for both teams.
+        alpha: Scalar baseline scoring parameter.
+        beta: Scalar covariance/shared-scoring parameter.
+        scale: Scalar parameter that controls the influence of the team strength
+        max_goals: The maximum number of goals to consider for each team when computing the score probabilities.
+            The resulting score grid will have shape (max_goals + 1, max_goals + 1).
+        gauss_hermite_degree: The number of points to use in the Gauss-Hermite integral
+            approximation.
+
+    Returns:
+        A tuple containing a grid of score probabilities up to max_goals:max_goals,
+            and the result probabilities (draw, home win, away win) derived from the score grid.
+    """
+    skills_mean = jnp.asarray(skills_mean)
+    skills_cov = jnp.asarray(skills_cov)
+
+    def log_lambdas_to_lik_mat(log_lambdas):
+        log_grid = _loglik_grid_loglambdas(
+            log_lambda1=log_lambdas[0],
+            log_lambda2=log_lambdas[1],
+            log_lambda3=beta,
+            max_goals=max_goals,
+        )
+        grid = jnp.exp(log_grid)
+        return jnp.where(jnp.isinf(grid), 1e-20, grid)
+
+    joint_mean = skills_mean.flatten()
+    joint_cov = jnp.block(
+        [[skills_cov[0], jnp.zeros((2, 2))], [jnp.zeros((2, 2)), skills_cov[1]]]
+    )
+    log_lambda_transform = (
+        jnp.array(
+            [
+                [1.0, 0.0, 0.0, -1.0],
+                [0.0, -1.0, 1.0, 0.0],
+            ]
+        )
+        / scale
+    )
+    log_lambda_mean = alpha + log_lambda_transform @ joint_mean
+    log_lambda_cov = log_lambda_transform @ joint_cov @ log_lambda_transform.T
+    exp_grid = ghq.multivariate(
+        log_lambdas_to_lik_mat,
+        log_lambda_mean,
+        log_lambda_cov,
+        degree=gauss_hermite_degree,
+    )
+    return exp_grid, _prob_mat_to_prob_results(exp_grid)
+
+
+def _prob_mat_to_prob_results(prob_mat):
+    prob_mat /= prob_mat.sum()
+    prob_draw = prob_mat.diagonal().sum()
+    prob_home = jnp.tril(prob_mat, -1).sum()
+    prob_away = jnp.triu(prob_mat, 1).sum()
+    return jnp.array([prob_draw, prob_home, prob_away])

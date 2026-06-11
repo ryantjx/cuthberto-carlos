@@ -12,6 +12,7 @@ from cuthberto_carlos.model_moments import (
     get_init_params,
     get_observation_params,
     get_observation_params_noop,
+    predict_match,
 )
 
 num_teams = 5
@@ -210,3 +211,41 @@ def test_noop_observation_leaves_dynamics_only_update_at_prediction():
         atol=1e-6,
     )
     assert jnp.allclose(0.0, update_state.log_normalizing_constant)
+
+
+def test_predict_match_returns_score_grid_and_result_probabilities():
+    skills_mean = jnp.array([[0.0, 0.0], [0.0, 0.0]])
+    skills_cov = jnp.array(
+        [
+            [[0.04, 0.01], [0.01, 0.09]],
+            [[0.04, 0.01], [0.01, 0.09]],
+        ]
+    )
+    max_goals = 3
+
+    score_probs, result_probs = predict_match(
+        skills_mean,
+        skills_cov,
+        alpha=-0.2,
+        beta=-1.1,
+        scale=1.0,
+        max_goals=max_goals,
+        gauss_hermite_degree=32,
+    )
+    normalized_score_probs = score_probs / score_probs.sum()
+
+    assert score_probs.shape == (max_goals + 1, max_goals + 1)
+    assert jnp.all(jnp.isfinite(score_probs))
+    assert jnp.all(score_probs >= 0.0)
+    assert jnp.allclose(
+        result_probs,
+        jnp.array(
+            [
+                normalized_score_probs.diagonal().sum(),
+                jnp.tril(normalized_score_probs, -1).sum(),
+                jnp.triu(normalized_score_probs, 1).sum(),
+            ]
+        ),
+    )
+    assert jnp.allclose(result_probs.sum(), 1.0)
+    assert jnp.allclose(result_probs[1], result_probs[2], atol=1e-6)
