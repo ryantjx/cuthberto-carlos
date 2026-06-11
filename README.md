@@ -6,9 +6,7 @@
 
 Using [`cuthbert`](https://github.com/state-space-models/cuthbert) to predict the 2026 FIFA World Cup!
 
-Check out the frontend for the predictions here: [https://ryantjx.github.io/cuthberto-carlos/](https://ryantjx.github.io/cuthberto-carlos/)
-
-
+Check out the frontend for the predictions here: [https://state-space-models.github.io/cuthberto-carlos/](https://state-space-models.github.io/cuthberto-carlos/)
 
 ## Rough idea
 
