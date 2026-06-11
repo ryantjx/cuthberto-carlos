@@ -11,6 +11,7 @@ from scripts.build_frontend_data import (
     normalize_grid,
     parse_kickoff_utc,
     prediction_metrics,
+    repository_tree_url,
 )
 
 
@@ -51,6 +52,20 @@ class FrontendDataCompilerTests(unittest.TestCase):
         self.assertEqual(metrics["mostLikelyScore"], [0, 0])
         self.assertAlmostEqual(metrics["expectedGoals"]["home"], 0.25)
         self.assertAlmostEqual(metrics["expectedGoals"]["away"], 0.25)
+
+    def test_latest_snapshot_source_url_uses_selected_iso_directory(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            older = root / "2026-06-10"
+            latest = root / "2026-06-11"
+            older.mkdir()
+            latest.mkdir()
+
+            self.assertEqual(discover_latest_snapshot(root).name, "2026-06-11")
+            self.assertEqual(
+                repository_tree_url(Path("outputs/predictions/2026-06-11")),
+                "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11",
+            )
 
 
 if __name__ == "__main__":

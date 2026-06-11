@@ -28,6 +28,7 @@ export interface MatchPrediction {
   venue: string;
   homeTeam: string;
   awayTeam: string;
+  sourceUrl: string;
   prediction: {
     probabilities: ResultProbabilities;
     scoreGrid: number[][];
@@ -83,6 +84,7 @@ export interface TournamentDataset {
   schemaVersion: number;
   snapshotDate: string;
   snapshotPath: string;
+  snapshotUrl: string;
   generatedAt: string;
   sourceCommit: string;
   model: {

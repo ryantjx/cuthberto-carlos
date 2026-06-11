@@ -1,9 +1,10 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "snapshotDate": "2026-06-11",
   "snapshotPath": "outputs/predictions/2026-06-11",
-  "generatedAt": "2026-06-11T14:05:07.269988Z",
-  "sourceCommit": "84e35a6a7faf",
+  "snapshotUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11",
+  "generatedAt": "2026-06-11T14:29:19.827682Z",
+  "sourceCommit": "a672c00e382b",
   "model": {
     "name": "Cuthberto Carlos bivariate Poisson model",
     "resultProbabilityOrder": [
@@ -421,6 +422,7 @@
       "venue": "Mexico City",
       "homeTeam": "Mexico",
       "awayTeam": "South Africa",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-11_Mexico_South Africa",
       "prediction": {
         "probabilities": {
           "homeWin": 0.60987133,
@@ -569,6 +571,7 @@
       "venue": "Guadalajara (Zapopan)",
       "homeTeam": "South Korea",
       "awayTeam": "Czech Republic",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-11_South Korea_Czech Republic",
       "prediction": {
         "probabilities": {
           "homeWin": 0.41847483,
@@ -717,6 +720,7 @@
       "venue": "Toronto",
       "homeTeam": "Canada",
       "awayTeam": "Bosnia and Herzegovina",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-12_Canada_Bosnia and Herzegovina",
       "prediction": {
         "probabilities": {
           "homeWin": 0.62429331,
@@ -865,6 +869,7 @@
       "venue": "Los Angeles (Inglewood)",
       "homeTeam": "United States",
       "awayTeam": "Paraguay",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-12_United States_Paraguay",
       "prediction": {
         "probabilities": {
           "homeWin": 0.40375325,
@@ -1013,6 +1018,7 @@
       "venue": "San Francisco Bay Area (Santa Clara)",
       "homeTeam": "Qatar",
       "awayTeam": "Switzerland",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-13_Qatar_Switzerland",
       "prediction": {
         "probabilities": {
           "homeWin": 0.06391418,
@@ -1161,6 +1167,7 @@
       "venue": "New York/New Jersey (East Rutherford)",
       "homeTeam": "Brazil",
       "awayTeam": "Morocco",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-13_Brazil_Morocco",
       "prediction": {
         "probabilities": {
           "homeWin": 0.42787102,
@@ -1309,6 +1316,7 @@
       "venue": "Boston (Foxborough)",
       "homeTeam": "Haiti",
       "awayTeam": "Scotland",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-13_Haiti_Scotland",
       "prediction": {
         "probabilities": {
           "homeWin": 0.21522205,
@@ -1457,6 +1465,7 @@
       "venue": "Vancouver",
       "homeTeam": "Australia",
       "awayTeam": "Turkey",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-13_Australia_Turkey",
       "prediction": {
         "probabilities": {
           "homeWin": 0.37933666,
@@ -1605,6 +1614,7 @@
       "venue": "Houston",
       "homeTeam": "Germany",
       "awayTeam": "Curaçao",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-14_Germany_Curaçao",
       "prediction": {
         "probabilities": {
           "homeWin": 0.88702095,
@@ -1753,6 +1763,7 @@
       "venue": "Dallas (Arlington)",
       "homeTeam": "Netherlands",
       "awayTeam": "Japan",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-14_Netherlands_Japan",
       "prediction": {
         "probabilities": {
           "homeWin": 0.36986114,
@@ -1901,6 +1912,7 @@
       "venue": "Philadelphia",
       "homeTeam": "Ivory Coast",
       "awayTeam": "Ecuador",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-14_Ivory Coast_Ecuador",
       "prediction": {
         "probabilities": {
           "homeWin": 0.22764158,
@@ -2049,6 +2061,7 @@
       "venue": "Monterrey (Guadalupe)",
       "homeTeam": "Sweden",
       "awayTeam": "Tunisia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-14_Sweden_Tunisia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.44077828,
@@ -2197,6 +2210,7 @@
       "venue": "Atlanta",
       "homeTeam": "Spain",
       "awayTeam": "Cape Verde",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-15_Spain_Cape Verde",
       "prediction": {
         "probabilities": {
           "homeWin": 0.88251027,
@@ -2345,6 +2359,7 @@
       "venue": "Seattle",
       "homeTeam": "Belgium",
       "awayTeam": "Egypt",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-15_Belgium_Egypt",
       "prediction": {
         "probabilities": {
           "homeWin": 0.61574719,
@@ -2493,6 +2508,7 @@
       "venue": "Miami (Miami Gardens)",
       "homeTeam": "Saudi Arabia",
       "awayTeam": "Uruguay",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-15_Saudi Arabia_Uruguay",
       "prediction": {
         "probabilities": {
           "homeWin": 0.14571392,
@@ -2641,6 +2657,7 @@
       "venue": "Los Angeles (Inglewood)",
       "homeTeam": "Iran",
       "awayTeam": "New Zealand",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-15_Iran_New Zealand",
       "prediction": {
         "probabilities": {
           "homeWin": 0.50493049,
@@ -2789,6 +2806,7 @@
       "venue": "New York/New Jersey (East Rutherford)",
       "homeTeam": "France",
       "awayTeam": "Senegal",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-16_France_Senegal",
       "prediction": {
         "probabilities": {
           "homeWin": 0.46246693,
@@ -2937,6 +2955,7 @@
       "venue": "Boston (Foxborough)",
       "homeTeam": "Iraq",
       "awayTeam": "Norway",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-16_Iraq_Norway",
       "prediction": {
         "probabilities": {
           "homeWin": 0.12237484,
@@ -3085,6 +3104,7 @@
       "venue": "Kansas City",
       "homeTeam": "Argentina",
       "awayTeam": "Algeria",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-16_Argentina_Algeria",
       "prediction": {
         "probabilities": {
           "homeWin": 0.63058757,
@@ -3233,6 +3253,7 @@
       "venue": "San Francisco Bay Area (Santa Clara)",
       "homeTeam": "Austria",
       "awayTeam": "Jordan",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-16_Austria_Jordan",
       "prediction": {
         "probabilities": {
           "homeWin": 0.57843798,
@@ -3381,6 +3402,7 @@
       "venue": "Houston",
       "homeTeam": "Portugal",
       "awayTeam": "DR Congo",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-17_Portugal_DR Congo",
       "prediction": {
         "probabilities": {
           "homeWin": 0.6823867,
@@ -3529,6 +3551,7 @@
       "venue": "Dallas (Arlington)",
       "homeTeam": "England",
       "awayTeam": "Croatia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-17_England_Croatia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.53952271,
@@ -3677,6 +3700,7 @@
       "venue": "Toronto",
       "homeTeam": "Ghana",
       "awayTeam": "Panama",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-17_Ghana_Panama",
       "prediction": {
         "probabilities": {
           "homeWin": 0.29278044,
@@ -3825,6 +3849,7 @@
       "venue": "Mexico City",
       "homeTeam": "Uzbekistan",
       "awayTeam": "Colombia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-17_Uzbekistan_Colombia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.12719942,
@@ -3973,6 +3998,7 @@
       "venue": "Atlanta",
       "homeTeam": "Czech Republic",
       "awayTeam": "South Africa",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-18_Czech Republic_South Africa",
       "prediction": {
         "probabilities": {
           "homeWin": 0.50898261,
@@ -4121,6 +4147,7 @@
       "venue": "Los Angeles (Inglewood)",
       "homeTeam": "Switzerland",
       "awayTeam": "Bosnia and Herzegovina",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-18_Switzerland_Bosnia and Herzegovina",
       "prediction": {
         "probabilities": {
           "homeWin": 0.72399874,
@@ -4269,6 +4296,7 @@
       "venue": "Vancouver",
       "homeTeam": "Canada",
       "awayTeam": "Qatar",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-18_Canada_Qatar",
       "prediction": {
         "probabilities": {
           "homeWin": 0.73508523,
@@ -4417,6 +4445,7 @@
       "venue": "Guadalajara (Zapopan)",
       "homeTeam": "Mexico",
       "awayTeam": "South Korea",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-18_Mexico_South Korea",
       "prediction": {
         "probabilities": {
           "homeWin": 0.44636536,
@@ -4565,6 +4594,7 @@
       "venue": "Seattle",
       "homeTeam": "United States",
       "awayTeam": "Australia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-19_United States_Australia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.36525601,
@@ -4713,6 +4743,7 @@
       "venue": "Boston (Foxborough)",
       "homeTeam": "Scotland",
       "awayTeam": "Morocco",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-19_Scotland_Morocco",
       "prediction": {
         "probabilities": {
           "homeWin": 0.2010224,
@@ -4861,6 +4892,7 @@
       "venue": "Philadelphia",
       "homeTeam": "Brazil",
       "awayTeam": "Haiti",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-19_Brazil_Haiti",
       "prediction": {
         "probabilities": {
           "homeWin": 0.82512392,
@@ -5009,6 +5041,7 @@
       "venue": "San Francisco Bay Area (Santa Clara)",
       "homeTeam": "Turkey",
       "awayTeam": "Paraguay",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-19_Turkey_Paraguay",
       "prediction": {
         "probabilities": {
           "homeWin": 0.41079387,
@@ -5157,6 +5190,7 @@
       "venue": "Houston",
       "homeTeam": "Netherlands",
       "awayTeam": "Sweden",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-20_Netherlands_Sweden",
       "prediction": {
         "probabilities": {
           "homeWin": 0.63090126,
@@ -5305,6 +5339,7 @@
       "venue": "Toronto",
       "homeTeam": "Germany",
       "awayTeam": "Ivory Coast",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-20_Germany_Ivory Coast",
       "prediction": {
         "probabilities": {
           "homeWin": 0.62496643,
@@ -5453,6 +5488,7 @@
       "venue": "Kansas City",
       "homeTeam": "Ecuador",
       "awayTeam": "Curaçao",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-20_Ecuador_Curaçao",
       "prediction": {
         "probabilities": {
           "homeWin": 0.7752036,
@@ -5601,6 +5637,7 @@
       "venue": "Monterrey (Guadalupe)",
       "homeTeam": "Tunisia",
       "awayTeam": "Japan",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-20_Tunisia_Japan",
       "prediction": {
         "probabilities": {
           "homeWin": 0.1368456,
@@ -5749,6 +5786,7 @@
       "venue": "Atlanta",
       "homeTeam": "Spain",
       "awayTeam": "Saudi Arabia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-21_Spain_Saudi Arabia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.82838639,
@@ -5897,6 +5935,7 @@
       "venue": "Los Angeles (Inglewood)",
       "homeTeam": "Belgium",
       "awayTeam": "Iran",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-21_Belgium_Iran",
       "prediction": {
         "probabilities": {
           "homeWin": 0.50473135,
@@ -6045,6 +6084,7 @@
       "venue": "Miami (Miami Gardens)",
       "homeTeam": "Uruguay",
       "awayTeam": "Cape Verde",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-21_Uruguay_Cape Verde",
       "prediction": {
         "probabilities": {
           "homeWin": 0.6907918,
@@ -6193,6 +6233,7 @@
       "venue": "Vancouver",
       "homeTeam": "New Zealand",
       "awayTeam": "Egypt",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-21_New Zealand_Egypt",
       "prediction": {
         "probabilities": {
           "homeWin": 0.33400726,
@@ -6341,6 +6382,7 @@
       "venue": "Dallas (Arlington)",
       "homeTeam": "Argentina",
       "awayTeam": "Austria",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-22_Argentina_Austria",
       "prediction": {
         "probabilities": {
           "homeWin": 0.62820978,
@@ -6489,6 +6531,7 @@
       "venue": "Philadelphia",
       "homeTeam": "France",
       "awayTeam": "Iraq",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-22_France_Iraq",
       "prediction": {
         "probabilities": {
           "homeWin": 0.7346119,
@@ -6637,6 +6680,7 @@
       "venue": "New York/New Jersey (East Rutherford)",
       "homeTeam": "Norway",
       "awayTeam": "Senegal",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-22_Norway_Senegal",
       "prediction": {
         "probabilities": {
           "homeWin": 0.39475349,
@@ -6785,6 +6829,7 @@
       "venue": "San Francisco Bay Area (Santa Clara)",
       "homeTeam": "Jordan",
       "awayTeam": "Algeria",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-22_Jordan_Algeria",
       "prediction": {
         "probabilities": {
           "homeWin": 0.19286763,
@@ -6933,6 +6978,7 @@
       "venue": "Houston",
       "homeTeam": "Portugal",
       "awayTeam": "Uzbekistan",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-23_Portugal_Uzbekistan",
       "prediction": {
         "probabilities": {
           "homeWin": 0.62709049,
@@ -7081,6 +7127,7 @@
       "venue": "Boston (Foxborough)",
       "homeTeam": "England",
       "awayTeam": "Ghana",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-23_England_Ghana",
       "prediction": {
         "probabilities": {
           "homeWin": 0.79796788,
@@ -7229,6 +7276,7 @@
       "venue": "Toronto",
       "homeTeam": "Panama",
       "awayTeam": "Croatia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-23_Panama_Croatia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.17819057,
@@ -7377,6 +7425,7 @@
       "venue": "Guadalajara (Zapopan)",
       "homeTeam": "Colombia",
       "awayTeam": "DR Congo",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-23_Colombia_DR Congo",
       "prediction": {
         "probabilities": {
           "homeWin": 0.71217091,
@@ -7525,6 +7574,7 @@
       "venue": "Seattle",
       "homeTeam": "Bosnia and Herzegovina",
       "awayTeam": "Qatar",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_Bosnia and Herzegovina_Qatar",
       "prediction": {
         "probabilities": {
           "homeWin": 0.48345118,
@@ -7673,6 +7723,7 @@
       "venue": "Vancouver",
       "homeTeam": "Canada",
       "awayTeam": "Switzerland",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_Canada_Switzerland",
       "prediction": {
         "probabilities": {
           "homeWin": 0.29428386,
@@ -7821,6 +7872,7 @@
       "venue": "Atlanta",
       "homeTeam": "Morocco",
       "awayTeam": "Haiti",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_Morocco_Haiti",
       "prediction": {
         "probabilities": {
           "homeWin": 0.71349073,
@@ -7969,6 +8021,7 @@
       "venue": "Miami (Miami Gardens)",
       "homeTeam": "Scotland",
       "awayTeam": "Brazil",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_Scotland_Brazil",
       "prediction": {
         "probabilities": {
           "homeWin": 0.14565048,
@@ -8117,6 +8170,7 @@
       "venue": "Mexico City",
       "homeTeam": "Mexico",
       "awayTeam": "Czech Republic",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_Mexico_Czech Republic",
       "prediction": {
         "probabilities": {
           "homeWin": 0.50213976,
@@ -8265,6 +8319,7 @@
       "venue": "Monterrey (Guadalupe)",
       "homeTeam": "South Africa",
       "awayTeam": "South Korea",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-24_South Africa_South Korea",
       "prediction": {
         "probabilities": {
           "homeWin": 0.20789792,
@@ -8413,6 +8468,7 @@
       "venue": "Philadelphia",
       "homeTeam": "Curaçao",
       "awayTeam": "Ivory Coast",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_Curaçao_Ivory Coast",
       "prediction": {
         "probabilities": {
           "homeWin": 0.1431259,
@@ -8561,6 +8617,7 @@
       "venue": "New York/New Jersey (East Rutherford)",
       "homeTeam": "Ecuador",
       "awayTeam": "Germany",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_Ecuador_Germany",
       "prediction": {
         "probabilities": {
           "homeWin": 0.30535614,
@@ -8709,6 +8766,7 @@
       "venue": "Dallas (Arlington)",
       "homeTeam": "Japan",
       "awayTeam": "Sweden",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_Japan_Sweden",
       "prediction": {
         "probabilities": {
           "homeWin": 0.62212496,
@@ -8857,6 +8915,7 @@
       "venue": "Kansas City",
       "homeTeam": "Tunisia",
       "awayTeam": "Netherlands",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_Tunisia_Netherlands",
       "prediction": {
         "probabilities": {
           "homeWin": 0.13870781,
@@ -9005,6 +9064,7 @@
       "venue": "San Francisco Bay Area (Santa Clara)",
       "homeTeam": "Paraguay",
       "awayTeam": "Australia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_Paraguay_Australia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.31666295,
@@ -9153,6 +9213,7 @@
       "venue": "Los Angeles (Inglewood)",
       "homeTeam": "United States",
       "awayTeam": "Turkey",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-25_United States_Turkey",
       "prediction": {
         "probabilities": {
           "homeWin": 0.38209254,
@@ -9301,6 +9362,7 @@
       "venue": "Boston (Foxborough)",
       "homeTeam": "Norway",
       "awayTeam": "France",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_Norway_France",
       "prediction": {
         "probabilities": {
           "homeWin": 0.30204154,
@@ -9449,6 +9511,7 @@
       "venue": "Toronto",
       "homeTeam": "Senegal",
       "awayTeam": "Iraq",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_Senegal_Iraq",
       "prediction": {
         "probabilities": {
           "homeWin": 0.6127927,
@@ -9597,6 +9660,7 @@
       "venue": "Houston",
       "homeTeam": "Cape Verde",
       "awayTeam": "Saudi Arabia",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_Cape Verde_Saudi Arabia",
       "prediction": {
         "probabilities": {
           "homeWin": 0.28887593,
@@ -9745,6 +9809,7 @@
       "venue": "Guadalajara (Zapopan)",
       "homeTeam": "Uruguay",
       "awayTeam": "Spain",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_Uruguay_Spain",
       "prediction": {
         "probabilities": {
           "homeWin": 0.18895637,
@@ -9893,6 +9958,7 @@
       "venue": "Seattle",
       "homeTeam": "Egypt",
       "awayTeam": "Iran",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_Egypt_Iran",
       "prediction": {
         "probabilities": {
           "homeWin": 0.25399745,
@@ -10041,6 +10107,7 @@
       "venue": "Vancouver",
       "homeTeam": "New Zealand",
       "awayTeam": "Belgium",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-26_New Zealand_Belgium",
       "prediction": {
         "probabilities": {
           "homeWin": 0.14516343,
@@ -10189,6 +10256,7 @@
       "venue": "Philadelphia",
       "homeTeam": "Croatia",
       "awayTeam": "Ghana",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_Croatia_Ghana",
       "prediction": {
         "probabilities": {
           "homeWin": 0.67290901,
@@ -10337,6 +10405,7 @@
       "venue": "New York/New Jersey (East Rutherford)",
       "homeTeam": "Panama",
       "awayTeam": "England",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_Panama_England",
       "prediction": {
         "probabilities": {
           "homeWin": 0.08501157,
@@ -10485,6 +10554,7 @@
       "venue": "Miami (Miami Gardens)",
       "homeTeam": "Colombia",
       "awayTeam": "Portugal",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_Colombia_Portugal",
       "prediction": {
         "probabilities": {
           "homeWin": 0.41894867,
@@ -10633,6 +10703,7 @@
       "venue": "Atlanta",
       "homeTeam": "DR Congo",
       "awayTeam": "Uzbekistan",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_DR Congo_Uzbekistan",
       "prediction": {
         "probabilities": {
           "homeWin": 0.29240123,
@@ -10781,6 +10852,7 @@
       "venue": "Kansas City",
       "homeTeam": "Algeria",
       "awayTeam": "Austria",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_Algeria_Austria",
       "prediction": {
         "probabilities": {
           "homeWin": 0.37879761,
@@ -10929,6 +11001,7 @@
       "venue": "Dallas (Arlington)",
       "homeTeam": "Jordan",
       "awayTeam": "Argentina",
+      "sourceUrl": "https://github.com/ryantjx/cuthberto-carlos/tree/main/outputs/predictions/2026-06-11/2026-06-27_Jordan_Argentina",
       "prediction": {
         "probabilities": {
           "homeWin": 0.06211937,

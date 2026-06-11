@@ -31,7 +31,7 @@ jobs:
 
       - name: Validate and compile prediction data
         run: |
-          python -m unittest discover -s tests -p 'test_build_frontend_data.py'
+          python -m unittest discover -s tests -p 'test_*frontend_data.py'
           python scripts/build_frontend_data.py
 
       - name: Set up Node
@@ -64,3 +64,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Validate deployed frontend data
+        run: |
+          python scripts/validate_deployed_frontend_data.py \
+            --url "${{ steps.deployment.outputs.page_url }}data/tournament.json" \
+            --source-commit "$GITHUB_SHA" \
+            --retries 12 \
+            --retry-delay 10

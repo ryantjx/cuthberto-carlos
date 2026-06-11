@@ -23,6 +23,7 @@ SCHEDULE_URL = (
     "https://raw.githubusercontent.com/openfootball/worldcup.json/"
     f"{SCHEDULE_COMMIT}/2026/worldcup.json"
 )
+REPOSITORY_URL = "https://github.com/ryantjx/cuthberto-carlos"
 
 TEAM_ALIASES = {
     "Bosnia & Herzegovina": "Bosnia and Herzegovina",
@@ -96,6 +97,11 @@ def slugify(value: str) -> str:
     value = value.lower().replace("&", " and ")
     value = re.sub(r"[^a-z0-9]+", "-", value)
     return value.strip("-")
+
+
+def repository_tree_url(path: Path) -> str:
+    """Return a GitHub tree URL for a repository-relative source directory."""
+    return f"{REPOSITORY_URL}/tree/main/{path.as_posix()}"
 
 
 def discover_latest_snapshot(predictions_root: Path = PREDICTIONS_ROOT) -> Path:
@@ -355,6 +361,9 @@ def compile_dataset(
             "venue": fixture["ground"],
             "homeTeam": home_team,
             "awayTeam": away_team,
+            "sourceUrl": (
+                repository_tree_url(prediction_path.parent.relative_to(root))
+            ),
             "prediction": {
                 "probabilities": {
                     "homeWin": round(home_win, 8),
@@ -420,9 +429,10 @@ def compile_dataset(
     knockout_matches.sort(key=lambda match: match["matchNumber"])
 
     return {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "snapshotDate": snapshot.name,
         "snapshotPath": str(snapshot.relative_to(root)),
+        "snapshotUrl": repository_tree_url(snapshot.relative_to(root)),
         "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "sourceCommit": source_commit(root),
         "model": {

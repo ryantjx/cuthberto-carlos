@@ -76,6 +76,25 @@ export function getUpcomingMatches(
     .slice(0, limit);
 }
 
+const ASSUMED_MATCH_DURATION_MS = 2 * 60 * 60 * 1000;
+
+export function getCompletedMatches(
+  matches: MatchPrediction[],
+  now = new Date(),
+): MatchPrediction[] {
+  const nowTime = now.getTime();
+  return [...matches]
+    .filter(
+      (match) =>
+        new Date(match.kickoffUtc).getTime() + ASSUMED_MATCH_DURATION_MS <= nowTime,
+    )
+    .sort(
+      (left, right) =>
+        new Date(right.kickoffUtc).getTime() -
+        new Date(left.kickoffUtc).getTime(),
+    );
+}
+
 export function aggregateScoreGrid(grid: number[][]): number[][] {
   const aggregate = Array.from({ length: 6 }, () => Array(6).fill(0));
   grid.forEach((row, homeGoals) => {

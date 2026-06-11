@@ -1,29 +1,31 @@
 import { useState } from "react";
 import type { MatchPrediction, Team } from "../types";
-import { getUpcomingMatches } from "../utils";
+import { getCompletedMatches } from "../utils";
 import { MatchCard } from "./MatchCard";
 import { MatchListRow } from "./MatchListRow";
 
-interface UpcomingMatchesProps {
+interface CompletedMatchesProps {
   matches: MatchPrediction[];
   teams: Record<string, Team>;
   onOpen: (match: MatchPrediction, trigger: HTMLElement) => void;
 }
 
-export function UpcomingMatches({ matches, teams, onOpen }: UpcomingMatchesProps) {
-  const upcoming = getUpcomingMatches(matches);
-  const [view, setView] = useState<"cards" | "list">("cards");
+export function CompletedMatches({ matches, teams, onOpen }: CompletedMatchesProps) {
+  const completed = getCompletedMatches(matches);
+  const [view, setView] = useState<"cards" | "list">("list");
 
   return (
-    <section className="section section--upcoming" id="upcoming" aria-labelledby="upcoming-title">
+    <section className="section section--completed" id="completed" aria-labelledby="completed-title">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Next up</span>
-          <h2 id="upcoming-title">Upcoming matches</h2>
+          <span className="eyebrow">Forecast archive</span>
+          <h2 id="completed-title">Completed matches</h2>
         </div>
         <div className="section-heading__tools">
-          <p>Kickoff times automatically use your local timezone.</p>
-          <div className="view-toggle" role="group" aria-label="Upcoming matches view">
+          <p>
+            Original pre-match forecasts, newest first. Fixtures move here two hours after scheduled kickoff.
+          </p>
+          <div className="view-toggle" role="group" aria-label="Completed matches view">
             <button
               type="button"
               className="view-toggle__button"
@@ -45,24 +47,24 @@ export function UpcomingMatches({ matches, teams, onOpen }: UpcomingMatchesProps
           </div>
         </div>
       </div>
-      {upcoming.length > 0 ? (
+      {completed.length > 0 ? (
         view === "cards" ? (
-          <div className="match-grid" data-testid="upcoming-card-view">
-            {upcoming.map((match) => (
+          <div className="match-grid" data-testid="completed-card-view">
+            {completed.map((match) => (
               <MatchCard key={match.id} match={match} teams={teams} onOpen={onOpen} />
             ))}
           </div>
         ) : (
-          <div className="match-list" data-testid="upcoming-list-view">
-            {upcoming.map((match) => (
+          <div className="match-list" data-testid="completed-list-view">
+            {completed.map((match) => (
               <MatchListRow key={match.id} match={match} teams={teams} onOpen={onOpen} />
             ))}
           </div>
         )
       ) : (
         <div className="empty-state">
-          <strong>No upcoming group fixtures remain.</strong>
-          <span>Browse the group-stage archive and its original predictions below.</span>
+          <strong>No completed group fixtures yet.</strong>
+          <span>The original predictions will appear here after matches finish.</span>
         </div>
       )}
     </section>

@@ -96,3 +96,14 @@ npm run dev
 
 The GitHub Pages workflow validates the prediction data, runs the frontend tests,
 builds with the `/cuthberto-carlos/` base path, and deploys on every push to `main`.
+
+The production build exposes the exact generated dataset at
+`/cuthberto-carlos/data/tournament.json`. Validate that the deployed data matches
+the latest prediction outputs and `assets/team_colors.json` with:
+
+```bash
+python scripts/validate_deployed_frontend_data.py
+```
+
+The deployment workflow runs this validation after publishing and fails if the
+snapshot, predictions, schedule, team metadata, or source commit differ.

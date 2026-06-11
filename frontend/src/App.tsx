@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import tournamentData from "./data/tournament.json";
+import { CompletedMatches } from "./components/CompletedMatches";
 import { GroupStage } from "./components/GroupStage";
 import { KnockoutBracket } from "./components/KnockoutBracket";
 import { MatchDetailDrawer } from "./components/MatchDetailDrawer";
@@ -32,6 +33,7 @@ function App() {
         </a>
         <nav aria-label="Primary navigation">
           <a href="#upcoming">Upcoming</a>
+          <a href="#completed">Completed</a>
           <a href="#groups">Groups</a>
           <a href="#finals">Finals</a>
         </nav>
@@ -65,12 +67,15 @@ function App() {
           </div>
           <div className="hero__snapshot">
             <span>Latest model snapshot</span>
-            <strong>{data.snapshotDate}</strong>
+            <a href={data.snapshotUrl} target="_blank" rel="noreferrer">
+              <strong>{data.snapshotDate}</strong>
+            </a>
             <small>Commit {data.sourceCommit}</small>
           </div>
         </section>
 
         <UpcomingMatches matches={data.groupMatches} teams={data.teams} onOpen={openMatch} />
+        <CompletedMatches matches={data.groupMatches} teams={data.teams} onOpen={openMatch} />
         <GroupStage groups={data.groups} matches={data.groupMatches} teams={data.teams} onOpen={openMatch} />
         <KnockoutBracket matches={data.knockoutMatches} />
       </main>

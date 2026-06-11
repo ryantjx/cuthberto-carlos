@@ -3,6 +3,7 @@ import type { MatchPrediction } from "../types";
 import {
   aggregateScoreGrid,
   describeBracketSlot,
+  getCompletedMatches,
   getUpcomingMatches,
 } from "../utils";
 
@@ -15,6 +16,7 @@ function match(id: string, kickoffUtc: string): MatchPrediction {
     venue: "Test venue",
     homeTeam: "Mexico",
     awayTeam: "South Africa",
+    sourceUrl: "https://example.test/source",
     prediction: {
       probabilities: { homeWin: 0.5, draw: 0.3, awayWin: 0.2 },
       scoreGrid: [[1]],
@@ -38,6 +40,22 @@ describe("getUpcomingMatches", () => {
     ];
 
     expect(getUpcomingMatches(matches, new Date("2026-06-11T18:00:00Z"), 1).map((item) => item.id)).toEqual(["next"]);
+  });
+});
+
+describe("getCompletedMatches", () => {
+  it("waits two hours after kickoff and sorts newest fixtures first", () => {
+    const matches = [
+      match("older", "2026-06-11T12:00:00Z"),
+      match("newer", "2026-06-11T14:00:00Z"),
+      match("in-progress", "2026-06-11T16:30:00Z"),
+    ];
+
+    expect(
+      getCompletedMatches(matches, new Date("2026-06-11T18:00:00Z")).map(
+        (item) => item.id,
+      ),
+    ).toEqual(["newer", "older"]);
   });
 });
 

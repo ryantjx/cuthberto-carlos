@@ -191,7 +191,9 @@ export function MatchDetailDrawer({
         </div>
 
         <footer className="drawer-footer">
-          <span>Snapshot {snapshotDate}</span>
+          <a href={match.sourceUrl} target="_blank" rel="noreferrer">
+            Snapshot {snapshotDate} source data <span aria-hidden="true">↗</span>
+          </a>
           <span>{modelName}</span>
         </footer>
       </section>

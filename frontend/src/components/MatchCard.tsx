@@ -54,11 +54,21 @@ export function MatchCard({ match, teams, onOpen }: MatchCardProps) {
           title={`${match.awayTeam} ${formatPercent(probabilities.awayWin, 1)}`}
         />
       </div>
+      <div className="match-card__probabilities" aria-hidden="true">
+        <span>H {formatPercent(probabilities.homeWin)}</span>
+        <span>D {formatPercent(probabilities.draw)}</span>
+        <span>A {formatPercent(probabilities.awayWin)}</span>
+      </div>
       <div className="match-card__footer">
         <span>{mostLikelyOutcome(probabilities, match.homeTeam, match.awayTeam)}</span>
-        <button className="text-button" type="button" onClick={handleOpen}>
-          Explore prediction <span aria-hidden="true">↗</span>
-        </button>
+        <span className="match-card__actions">
+          <button className="text-button" type="button" onClick={handleOpen}>
+            Explore prediction
+          </button>
+          <a className="text-link" href={match.sourceUrl} target="_blank" rel="noreferrer">
+            Source <span aria-hidden="true">↗</span>
+          </a>
+        </span>
       </div>
     </article>
   );
