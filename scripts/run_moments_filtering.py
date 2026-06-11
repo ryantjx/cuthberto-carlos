@@ -1,17 +1,18 @@
-"""Run taylor filtering on the data, for arbitrary (not learnt) static parameters."""
+"""Run moments filtering on the data, for arbitrary (not learnt) static parameters."""
 
 from functools import partial
 from jax import numpy as jnp
 import jax
 import pandas as pd
 import plotnine as pn
-from cuthbert.gaussian import taylor
+import json
+from cuthbert.gaussian import moments
 from cuthbert.factorial.gaussian import build_factorializer
 from cuthbert.factorial import filter as factorial_filter
 
 from cuthberto_carlos.data import download_data
-from cuthberto_carlos.types import DynamicsOnlyData
-from cuthberto_carlos import model
+from cuthberto_carlos.data_types import DynamicsOnlyData
+from cuthberto_carlos import model_moments
 
 
 max_goals = 8
@@ -20,7 +21,7 @@ pd_data, jax_data, teams_id_to_name_dict, teams_name_to_id_dict = download_data(
     max_goals=max_goals
 )
 
-average_goals_in_a_draw = (
+average_goals_per_team_in_a_draw = (
     pd_data[pd_data["home_score"] == pd_data["away_score"]][
         ["home_score", "away_score"]
     ]
@@ -29,37 +30,54 @@ average_goals_in_a_draw = (
 )
 
 init_mean = jnp.array([0.0, 0.0])
-init_sd = jnp.array([1.0, 1.0])
-tau = 0.01
-kappa = 1e-4
-alpha = jnp.log(
-    average_goals_in_a_draw
-)  # exp(alpha) is expected goals for an evenly matched game
-beta = -4.0
+
+# init_cov = jnp.array([[1.0, 0.2], [0.2, 1.0]])
+# kappa = 1e-4
+# friendly_scale = 1.0
+# alpha = jnp.log(
+#     average_goals_per_team_in_a_draw
+# )  # exp(alpha) is expected goals for an evenly matched game
+# beta = -2.0
+
+
+params_file = "outputs/moments_params.json"
+with open(params_file, "r") as f:
+    params = json.load(f)["params"]
+
+params = {k: jnp.asarray(v) for k, v in params.items()}
 
 num_teams = len(teams_id_to_name_dict)
+
+init_chol_cov = jnp.linalg.cholesky(params["init_cov"])
 
 # Add dummy element at index 0 for each leaf
 model_inputs = jax.tree.map(
     lambda x: jnp.concatenate([jnp.zeros_like(x[:1]), x], axis=0), jax_data
 )
 
-filter = taylor.build_filter(
-    get_init_log_density=partial(
-        model.get_init_log_density,
+filter = moments.build_filter(
+    get_init_params=partial(
+        model_moments.get_init_params,
         init_mean=init_mean,
-        init_sd=init_sd,
+        init_chol_cov=init_chol_cov,
         num_teams=num_teams,
     ),
-    get_dynamics_log_density=partial(
-        model.get_dynamics_log_density, tau=tau, init_mean=init_mean, kappa=kappa
+    get_dynamics_params=partial(
+        model_moments.get_dynamics_params,
+        init_mean=init_mean,
+        init_chol_cov=init_chol_cov,
+        kappa=params["kappa"],
     ),
-    get_observation_func=partial(
-        model.get_observation_log_potential, alpha=alpha, beta=beta, max_goals=max_goals
+    get_observation_params=partial(
+        model_moments.get_observation_params,
+        alpha=params["alpha"],
+        beta=params["beta"],
+        friendly_scale=params["friendly_scale"],
     ),
-    rtol=1e-7,
 )
-factorializer = build_factorializer(get_factorial_indices=model.get_factorial_inds)
+factorializer = build_factorializer(
+    get_factorial_indices=model_moments.get_factorial_inds
+)
 
 
 # init_factorial_state, local_states, final_factorial_state  = factorial_filter(
@@ -90,16 +108,19 @@ sync_data = DynamicsOnlyData(
     timestamp_previous=most_recent_timestamp_by_team,
 )
 
-single_team_filter = taylor.build_filter(
-    get_init_log_density=partial(
-        model.get_init_log_density,
+single_team_filter = moments.build_filter(
+    get_init_params=partial(
+        model_moments.get_init_params,
         init_mean=init_mean,
-        init_sd=init_sd,
+        init_chol_cov=init_chol_cov,
     ),
-    get_dynamics_log_density=partial(
-        model.get_dynamics_log_density, tau=tau, init_mean=init_mean, kappa=kappa
+    get_dynamics_params=partial(
+        model_moments.get_dynamics_params,
+        init_mean=init_mean,
+        init_chol_cov=init_chol_cov,
+        kappa=params["kappa"],
     ),
-    get_observation_func=model.get_observation_log_potential_noop,
+    get_observation_params=model_moments.get_observation_params_noop,
 )
 out_factorial_final = jax.vmap(factorializer.extract, in_axes=(None, 0))(
     out_factorial_final, jnp.arange(num_teams)
@@ -161,5 +182,4 @@ team_strength_plot = (
     + pn.theme_minimal()
     + pn.theme(figure_size=(10, 7))
 )
-# team_strength_plot.save("taylor_filtering_team_strengths.png", dpi=300, verbose=False)
-team_strength_plot.show()
+team_strength_plot.save("outputs/team_strength_plot.png", dpi=300, verbose=False)

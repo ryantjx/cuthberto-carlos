@@ -14,6 +14,7 @@ class ResultData(NamedTuple):
         home_score: Integer number of goals scored by the home team in the match.
         away_score: Integer number of goals scored by the away team in the match.
         neutral: Boolean indicating whether the match was played on neutral ground.
+        friendly: Boolean indicating whether the match was a friendly match.
         timestamp: Integer number of days since the origin date for the match.
         home_timestamp_previous: Optional timestamp for the previous home team match.
         away_timestamp_previous: Optional timestamp for the previous away team match.
@@ -25,6 +26,7 @@ class ResultData(NamedTuple):
     home_score: Array
     away_score: Array
     neutral: Array
+    friendly: Array
     timestamp: Array
     home_timestamp_previous: Array | None = None
     away_timestamp_previous: Array | None = None

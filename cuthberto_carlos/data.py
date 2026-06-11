@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from jax import numpy as jnp
 
-from cuthberto_carlos.types import ResultData
+from cuthberto_carlos.data_types import ResultData
 
 DATA_URL = (
     "https://raw.githubusercontent.com/martj42/international_results/master/results.csv"
@@ -46,9 +46,20 @@ def download_data(
 
     data_all = pd.read_csv(DATA_URL)
 
+    # Patch the Senegal vs Morocco AFCON 2026 final to be 1-0 to Senegal, rather than the defaulted 3-0
+    data_all.loc[
+        (data_all["home_team"] == "Morocco")
+        & (data_all["away_team"] == "Senegal")
+        & (data_all["date"] == "2026-01-18"),
+        ["home_score", "away_score"],
+    ] = [0, 1]
+
     # Process time data into days since origin date
     data_all["date"] = pd.to_datetime(data_all["date"])
     data_all["timestamp_days"] = (data_all["date"] - origin_timestamp).dt.days
+    data_all["friendly"] = data_all["tournament"].str.contains(
+        "Friendly", case=False, na=False
+    )
 
     # Remove future matches if requested
     if not future_matches:
@@ -114,8 +125,9 @@ def download_data(
         away_team_id=jnp.array(data_all["away_team_id"].values),
         home_score=jnp.array(data_all["home_score"].values),
         away_score=jnp.array(data_all["away_score"].values),
-        timestamp=jnp.array(data_all["timestamp_days"].values),
         neutral=jnp.array(data_all["neutral"].values),
+        friendly=jnp.array(data_all["friendly"].values),
+        timestamp=jnp.array(data_all["timestamp_days"].values),
         home_timestamp_previous=jnp.array(data_all["home_timestamp_previous"].values),
         away_timestamp_previous=jnp.array(data_all["away_timestamp_previous"].values),
     )

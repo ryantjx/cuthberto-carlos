@@ -1,6 +1,7 @@
 .python-version
 uv.lock
 .vscode/
+*fontlist*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -220,3 +221,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local uv cache used when sandboxing blocks the global cache
+.uv-cache/
