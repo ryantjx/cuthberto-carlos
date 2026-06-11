@@ -5,8 +5,11 @@ from __future__ import annotations
 import argparse
 from collections.abc import Mapping, Sequence
 import hashlib
+import importlib.util
+import ipaddress
 import json
 from pathlib import Path
+import sys
 import time
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -14,11 +17,21 @@ from urllib.request import Request, urlopen
 
 try:
     from scripts.build_frontend_data import DEFAULT_OUTPUT, compile_dataset, source_commit
-except ModuleNotFoundError:  # pragma: no cover - script execution path
-    from build_frontend_data import DEFAULT_OUTPUT, compile_dataset, source_commit
+except ModuleNotFoundError:  # pragma: no cover - direct script execution path
+    build_module_path = Path(__file__).with_name("build_frontend_data.py")
+    spec = importlib.util.spec_from_file_location("build_frontend_data", build_module_path)
+    if spec is None or spec.loader is None:
+        raise
+    module = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("build_frontend_data", module)
+    spec.loader.exec_module(module)
+    DEFAULT_OUTPUT = module.DEFAULT_OUTPUT
+    compile_dataset = module.compile_dataset
+    source_commit = module.source_commit
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SHORT_HASH_LENGTH = 12
 
 
 def cache_busted_url(url: str, commit: str) -> str:
@@ -130,13 +143,43 @@ def load_expected_dataset(expected_path: Path) -> dict[str, Any]:
 
 def fetch_dataset(url: str) -> dict[str, Any]:
     """Fetch JSON dataset from deployed URL."""
+    parts = urlsplit(url)
+    hostname = parts.hostname or ""
+    is_loopback_host = hostname == "localhost"
+    if not is_loopback_host:
+        try:
+            is_loopback_host = ipaddress.ip_address(hostname).is_loopback
+        except ValueError:
+            is_loopback_host = False
+    if parts.scheme == "http" and not is_loopback_host:
+        raise ValueError("Insecure URL scheme: use HTTPS for non-local validation")
+    if parts.scheme not in {"https", "http"}:
+        raise ValueError(f"Unsupported URL scheme: {parts.scheme}")
     request = Request(url, headers={"User-Agent": "cuthberto-carlos-validator"})
-    with urlopen(request, timeout=30) as response:  # noqa: S310 - HTTPS URL input
+    with urlopen(request, timeout=30) as response:  # noqa: S310 - scheme validated above
         return json.load(response)
 
 
 def main() -> None:
     """Run deployed frontend dataset validation."""
+    def positive_int(value: str) -> int:
+        parsed = int(value)
+        if parsed < 1:
+            raise argparse.ArgumentTypeError("retry count must be >= 1")
+        return parsed
+
+    def normalized_commit(value: str) -> str:
+        commit = value.strip()
+        if len(commit) < 7:
+            raise argparse.ArgumentTypeError("commit hash must be at least 7 characters")
+        return commit
+
+    def non_negative_float(value: str) -> float:
+        parsed = float(value)
+        if parsed < 0:
+            raise argparse.ArgumentTypeError("retry delay must be >= 0")
+        return parsed
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--url",
@@ -145,6 +188,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--source-commit",
+        type=normalized_commit,
         default=source_commit(ROOT),
         help="Expected source commit (defaults to current/GITHUB_SHA short hash)",
     )
@@ -154,35 +198,38 @@ def main() -> None:
         default=DEFAULT_OUTPUT,
         help="Path to local expected tournament.json",
     )
-    parser.add_argument("--retries", type=int, default=6)
-    parser.add_argument("--retry-delay", type=float, default=5.0)
+    parser.add_argument("--retries", type=positive_int, default=6)
+    parser.add_argument("--retry-delay", type=non_negative_float, default=5.0)
     args = parser.parse_args()
 
     expected_dataset = load_expected_dataset(args.expected)
-    expected_commit = args.source_commit[:12]
+    expected_commit = normalized_commit(args.source_commit)[:SHORT_HASH_LENGTH]
     deployed_url = cache_busted_url(args.url, expected_commit)
+    retries = args.retries
 
     last_error: Exception | None = None
-    for attempt in range(1, max(args.retries, 1) + 1):
+    for attempt in range(1, retries + 1):
         try:
             deployed_dataset = fetch_dataset(deployed_url)
             validate_dataset(expected_dataset, deployed_dataset, expected_commit)
             print(
                 "Validated deployed dataset successfully "
-                f"(sourceCommit={expected_commit}, digest={dataset_digest(deployed_dataset)[:12]}...)"
+                "(sourceCommit="
+                f"{expected_commit}, "
+                f"digest={dataset_digest(deployed_dataset)[:SHORT_HASH_LENGTH]}...)"
             )
             return
         except Exception as error:  # noqa: BLE001 - report exact validation failure
             last_error = error
-            if attempt == max(args.retries, 1):
+            if attempt == retries:
                 break
             print(
-                f"Validation attempt {attempt}/{max(args.retries, 1)} failed: {error}. "
+                f"Validation attempt {attempt}/{retries} failed: {error}. "
                 f"Retrying in {args.retry_delay}s..."
             )
-            time.sleep(max(args.retry_delay, 0.0))
+            time.sleep(args.retry_delay)
 
-    raise SystemExit(f"Validation failed after {max(args.retries, 1)} attempts: {last_error}")
+    raise SystemExit(f"Validation failed after {retries} attempts: {last_error}")
 
 
 if __name__ == "__main__":
