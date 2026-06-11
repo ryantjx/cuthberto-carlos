@@ -76,3 +76,23 @@ The end goal will be to generate small prediction graphics prior to each match i
 - [x] Code to download/extract future fixtures
 - [x] Code to generate predictions for future fixtures
 - [x] Code to generate graphics for predictions
+
+## Interactive World Cup frontend
+
+The repository includes a responsive React frontend for exploring the latest dated
+prediction snapshot. It combines the model output with the CC0
+[`openfootball/worldcup.json`](https://github.com/openfootball/worldcup.json)
+schedule to provide upcoming matches, model-projected group tables, detailed score
+distributions, and the official knockout bracket.
+
+Generate the latest frontend dataset and run the app locally:
+
+```bash
+python scripts/build_frontend_data.py
+cd frontend
+npm install
+npm run dev
+```
+
+The GitHub Pages workflow validates the prediction data, runs the frontend tests,
+builds with the `/cuthberto-carlos/` base path, and deploys on every push to `main`.
