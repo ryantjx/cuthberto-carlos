@@ -292,25 +292,110 @@ describe("App interactions", () => {
     }
   });
 
-  it("keeps ongoing fixtures out of Upcoming matches", () => {
+  it("labels a team once it has mathematically clinched a top-two finish", () => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-06-11T20:00:00Z"));
+    vi.setSystemTime(new Date("2026-07-01T00:00:00Z"));
+    const group = data.groups[0];
+    const winners = new Map<string, string>([
+      [["Mexico", "South Africa"].sort().join("|"), "Mexico"],
+      [["Czech Republic", "South Korea"].sort().join("|"), "South Korea"],
+      [["Mexico", "South Korea"].sort().join("|"), "Mexico"],
+    ]);
+    const draw = ["Czech Republic", "South Africa"].sort().join("|");
+    const groupMatches = data.groupMatches
+      .filter((match) => match.group === group.id)
+      .map((match) => {
+        const copy = structuredClone(match);
+        delete copy.actualResult;
+        const pair = [copy.homeTeam, copy.awayTeam].sort().join("|");
+        const winner = winners.get(pair);
+        if (winner) {
+          copy.actualResult = {
+            homeScore: copy.homeTeam === winner ? 1 : 0,
+            awayScore: copy.awayTeam === winner ? 1 : 0,
+            homeGoals: [],
+            awayGoals: [],
+          };
+        } else if (pair === draw) {
+          copy.actualResult = { homeScore: 1, awayScore: 1, homeGoals: [], awayGoals: [] };
+        }
+        return copy;
+      });
 
     try {
-      render(<App />);
-      const upcoming = screen.getByRole("region", { name: "All upcoming matches in card view" });
-      expect(within(upcoming).queryByText("LIVE")).not.toBeInTheDocument();
+      render(<GroupStage groups={[group]} matches={groupMatches} teams={data.teams} onOpen={vi.fn()} />);
+
+      expect(within(screen.getByRole("row", { name: /Mexico/ })).getByText("Qualified")).toBeInTheDocument();
+      expect(screen.getAllByText("Qualified")).toHaveLength(1);
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it("shows Polymarket only for future fixtures and in their drawer", () => {
+  it("shows ongoing fixtures with LIVE model and Polymarket values in card and list views", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-06-20T18:00:00Z"));
+    const liveMatch = data.groupMatches.find(
+      (match) => match.homeTeam === "Netherlands" && match.awayTeam === "Sweden",
+    )!;
+    const market = (selection: string, price: number) => ({
+      active: true,
+      closed: false,
+      sportsMarketType: "moneyline",
+      outcomes: '["Yes", "No"]',
+      outcomePrices: JSON.stringify([String(price), String(1 - price)]),
+      updatedAt: "2026-06-20T17:59:00Z",
+      marketMetadata: { opticOddsSelection: selection },
+    });
+    vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+      if (!String(input).includes("gamma-api.polymarket.com")) throw new Error("Live results unavailable");
+      return {
+        ok: true,
+        json: async () => ({
+          events: [{
+            eventDate: "2026-06-20",
+            title: "Netherlands vs. Sweden",
+            slug: "fifwc-nld-swe-2026-06-20",
+            markets: [market("Netherlands", 0.555), market("Draw", 0.245), market("Sweden", 0.205)],
+          }],
+        }),
+      };
+    }));
+
+    try {
+      render(<App />);
+      await act(async () => {
+        await Promise.resolve();
+        await Promise.resolve();
+      });
+      const upcoming = screen.getByRole("region", { name: "All upcoming matches in card view" });
+      const liveCard = within(upcoming).getByText("LIVE").closest("article");
+      expect(liveCard).toHaveTextContent("Netherlands");
+      expect(liveCard).toHaveTextContent("Sweden");
+      expect(within(liveCard!).getByRole("heading", { name: "Model vs Polymarket" })).toBeInTheDocument();
+      const homeComparison = within(liveCard!).getByRole("row", { name: /Netherlands win/ });
+      expect(homeComparison).toHaveTextContent(formatPercentForTest(liveMatch.prediction.probabilities.homeWin));
+      expect(homeComparison).toHaveTextContent("55.5%");
+
+      const viewToggle = screen.getByRole("group", { name: "Upcoming matches view" });
+      fireEvent.click(within(viewToggle).getByRole("button", { name: "List" }));
+      const upcomingList = screen.getByRole("region", { name: "All upcoming matches in list view" });
+      const liveRow = within(upcomingList).getByText("LIVE").closest("article");
+      expect(liveRow).toHaveTextContent("Netherlands");
+      expect(liveRow).toHaveTextContent("Sweden");
+      expect(within(liveRow!).getByLabelText("Polymarket probabilities")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows Polymarket only for future fixtures and in their drawer", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-19T12:00:00Z"));
 
     try {
       render(<App />);
+      await act(async () => { await Promise.resolve(); });
       const upcoming = screen.getByRole("region", { name: "All upcoming matches in card view" });
       const marketRows = within(upcoming).getAllByLabelText("Model versus Polymarket probabilities");
       expect(marketRows.length).toBeGreaterThan(0);
