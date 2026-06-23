@@ -232,6 +232,7 @@ def main():
     #     key=jax.random.PRNGKey(0)
     # )
     keys = jax.random.split(jax.random.PRNGKey(0), len(jax_data.match_index))
+    # map data into
     init_model_inputs = tree.map(lambda x: x[0], jax_data)
     factorial_state = smc_filter.init_prepare(init_model_inputs, key=keys[0])
     factorial_state = factorializer.factorialize_init_state(factorial_state, init_model_inputs)

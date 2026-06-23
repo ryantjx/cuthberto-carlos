@@ -17,7 +17,8 @@ smc_filter = build_filter(
 
 [X] Implement SMC filter for the Bivariate Poisson model for football scores.
 [X] Perform diagnostics on SMC filter results - does not seem that accurate? partly because low particle count (N=250)
-[ ] Build 
+[X] Build factorial SMC model for bivariate poisson.
+[X] Perform diagnostics on factorial SMC filter results
 [ ] Compare SMC filter with Gaussian Moments Filter (compare distributions, whether Gaussian Moments Filter approximates SMC (true) distribution well)
 [ ] Compare performance of SMC compared to Gaussian Moments Filter (Log-normalizing constant, predictive accuracy, etc.)
 [ ] Implement SQMC
@@ -32,4 +33,4 @@ smc_filter = build_filter(
 **220626**
 - Implement factorialized SMC filter: each team's particle filter is independent of the others
 - ran on `N=10000` from `2000-01-01` to `2026-06-11`. computation is more efficient, so then naturally there are results from this. not sure why England / Portugal has nan values? even though they should have played matches.
-  - ![alt text](fact_smc_output.png)
+  - ![alt text](./fact_smc/output/fact_smc_output.png)
