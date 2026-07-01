@@ -11,3 +11,5 @@ matplotlib
 seaborn
 polars
 tqdm
+pyarrows
+altair
